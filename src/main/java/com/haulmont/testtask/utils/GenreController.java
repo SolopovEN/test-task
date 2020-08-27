@@ -13,8 +13,7 @@ public class GenreController {
     public List<Genre> getGenres() {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        List<Genre> genres = (List<Genre>) session.createQuery("from Genre").list();
+        List<Genre> genres = session.createQuery("from Genre", Genre.class).getResultList();
         session.close();
 
         return genres;
@@ -33,5 +32,14 @@ public class GenreController {
     public void updateGenre(Genre genre) {
 
         HibernateUtil.updateEntity(genre);
+    }
+
+    public long getBooksCount(Genre genre) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        long count = (long) session.createQuery("select count(*) from Book book where book.genre = :id")
+                .setLong("id", genre.getId())
+                .uniqueResult();
+        session.close();
+        return count;
     }
 }

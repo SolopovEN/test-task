@@ -16,7 +16,7 @@ public class GridFactory {
                 toReturn = BookGrid.getInstance();
                 break;
             case GENRE:
-                toReturn = new GenreGrid();
+                toReturn = GenreGrid.getInstance();
                 break;
             case AUTHOR:
                 toReturn = new AuthorGrid();

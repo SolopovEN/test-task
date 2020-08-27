@@ -1,6 +1,7 @@
 package com.haulmont.testtask.utils;
 
 import com.haulmont.testtask.Models.Author;
+import com.haulmont.testtask.Models.Book;
 import com.haulmont.testtask.Models.Genre;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,6 +22,9 @@ public class HibernateUtil {
         try {
             if (sessionFactory == null) {
                 Configuration configuration = new Configuration().configure(getFileFromResources("hibernate.xml"));
+                configuration.addAnnotatedClass(Author.class);
+                configuration.addAnnotatedClass(Book.class);
+                configuration.addAnnotatedClass(Genre.class);
                 StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder();
                 serviceRegistryBuilder.applySettings(configuration.getProperties());
                 ServiceRegistry serviceRegistry = serviceRegistryBuilder.build();
@@ -55,36 +59,26 @@ public class HibernateUtil {
     }
 
     public static void deleteEntity(Object object) {
-
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.delete(object);
+        session.remove(object);
         transaction.commit();
-        session.flush();
-        session.clear();
         session.close();
     }
 
     public static void updateEntity(Object object) {
-
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(object);
         transaction.commit();
-        session.flush();
-        session.clear();
         session.close();
     }
 
     public static void saveEntity(Object object) {
-
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.persist(object);
-        session.save(object);
         transaction.commit();
-        session.flush();
-        session.clear();
         session.close();
     }
 }

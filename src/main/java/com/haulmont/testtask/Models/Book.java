@@ -6,6 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.Calendar;
@@ -15,36 +16,37 @@ import static javax.persistence.GenerationType.AUTO;
 
 
 @Entity
-@Table(name = "book")
-public class Book {
+@Table(name = "Book")
+public class Book implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
-    @Column(name = "book_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Pattern(regexp = "[' 'а-яА-Яa-zA-ZЁё]{1,100}", message = "Название книги должно состоять из букв")
-    @Column(name = "Title")
+    @Column(name = "title")
     private String title;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name="author_id")
     private Author author;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name="genre_id")
     private Genre genre;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Publisher")
+    @Column(name = "publisher")
     private Publisher publisher;
 
     @Max(value = 2020, message = "Год должен быть не больше текущего")
     @Min(value = 1800, message = "Год должен быть не менее 1800")
-    @Column(name = "Year")
+    @Column(name = "year")
     private Integer year;
 
     @Pattern(regexp = "[' 'а-яА-Яa-zA-ZЁё]{1,100}", message = "Название города должно состоять из букв")
-    @Column(name = "City")
+    @Column(name = "city")
     private String city;
 
     public Book(String title, Author author, Genre genre, Publisher publisher, Integer year, String city) {

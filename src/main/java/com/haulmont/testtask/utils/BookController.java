@@ -13,8 +13,7 @@ public class BookController {
     public List<Book> getBooks() {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        List<Book> books = (List<Book>) session.createQuery(" from Book").list();
+        List<Book> books = session.createQuery("from Book", Book.class).getResultList();
         session.close();
 
         return books;
@@ -26,9 +25,6 @@ public class BookController {
     }
 
     public void deleteBook(Book book) {
-
-        book.getAuthor().getBook().remove(book);
-        book.getGenre().getBook().remove(book);
         HibernateUtil.deleteEntity(book);
     }
 
@@ -40,8 +36,7 @@ public class BookController {
     public List<Book> filterBooks(String title, String... params) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        List<Book> books = (List<Book>) session.createQuery(generateQuery(title, params)).list();
+        List<Book> books = session.createQuery(generateQuery(title, params), Book.class).getResultList();
         session.close();
 
         return books;

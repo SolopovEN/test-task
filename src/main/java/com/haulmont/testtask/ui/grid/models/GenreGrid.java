@@ -8,13 +8,23 @@ import com.vaadin.ui.*;
 
 public class GenreGrid implements DefaultGrid {
 
-    GenreController genreController;
+    private static final GenreController genreController = new GenreController();
     Grid<Genre> genreGrid;
+    private static GenreGrid instance;
+
+    private GenreGrid() {
+    }
+
+    public static GenreGrid getInstance() {
+        if (instance == null) {
+            instance = new GenreGrid();
+        }
+        return instance;
+    }
+
 
     @Override
     public VerticalLayout create(AbstractOrderedLayout mainLayout) {
-
-        genreController = new GenreController();
         VerticalLayout genreTable = new VerticalLayout();
         Button thirdAddButton = new Button("Добавить");
 
@@ -24,11 +34,11 @@ public class GenreGrid implements DefaultGrid {
             window.addCloseListener(closeEvent -> genreGrid.setItems(genreController.getGenres()));
         });
 
-        HorizontalLayout thirdTwoButton = new HorizontalLayout();
-        thirdTwoButton.setWidth("100%");
-        HorizontalLayout thirdTwoButtonUp = new HorizontalLayout();
+        HorizontalLayout genreBottomButtonsLayout = new HorizontalLayout();
+        HorizontalLayout genreTopButtonsLayout = new HorizontalLayout();
+        genreBottomButtonsLayout.setWidth("100%");
+        genreTopButtonsLayout.setWidth("100%");
         Button statistic = new Button("Статистика");
-        thirdTwoButtonUp.setWidth("100%");
         Button thirdEditButton = new Button("Редактировать");
 
         genreGrid = new Grid<>();
@@ -53,14 +63,14 @@ public class GenreGrid implements DefaultGrid {
                 window.addCloseListener(closeEvent -> genreGrid.setItems(genreController.getGenres()));
             }
         });
-        thirdTwoButton.addComponents(thirdEditButton, genreDeleteButton);
-        thirdTwoButton.setComponentAlignment(genreDeleteButton, Alignment.MIDDLE_RIGHT);
-        thirdTwoButtonUp.addComponents(thirdAddButton, statistic);
-        thirdTwoButtonUp.setComponentAlignment(statistic, Alignment.MIDDLE_RIGHT);
-        genreTable.addComponents(thirdTwoButtonUp, genreGrid, thirdTwoButton);
+        genreBottomButtonsLayout.addComponents(thirdEditButton, genreDeleteButton);
+        genreBottomButtonsLayout.setComponentAlignment(genreDeleteButton, Alignment.MIDDLE_RIGHT);
+        genreTopButtonsLayout.addComponents(thirdAddButton, statistic);
+        genreTopButtonsLayout.setComponentAlignment(statistic, Alignment.MIDDLE_RIGHT);
+        genreTable.addComponents(genreTopButtonsLayout, genreGrid, genreBottomButtonsLayout);
         genreGrid.setItems(genreController.getGenres());
         genreGrid.addColumn(Genre::getTitle).setCaption("Название жанра");
-        Grid.Column<Genre, Integer> statColumn = genreGrid.addColumn(Genre::getBookCount).setCaption("Статистика");
+        Grid.Column<Genre, Long> statColumn = genreGrid.addColumn(genreController::getBooksCount).setCaption("Статистика");
         statColumn.setHidden(true);
         statistic.addClickListener(clickEvent -> {
             statColumn.setHidden(false);
@@ -69,4 +79,7 @@ public class GenreGrid implements DefaultGrid {
         return genreTable;
     }
 
+    public void refreshGenreGrid() {
+        genreGrid.setItems(genreController.getGenres());
+    }
 }

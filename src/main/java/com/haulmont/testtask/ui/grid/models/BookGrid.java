@@ -14,7 +14,7 @@ import java.util.Collection;
 
 public class BookGrid implements DefaultGrid, FilterableGrid {
 
-    private BookController bookController = new BookController();
+    private final BookController bookController = new BookController();
     private Grid<Book> bookGrid;
     private ComboBox<Author> authorField;
     private static BookGrid instance;
@@ -40,6 +40,7 @@ public class BookGrid implements DefaultGrid, FilterableGrid {
             mainLayout.getUI().addWindow(window);
             window.addCloseListener(closeEvent -> {
                 bookGrid.setItems(bookController.getBooks());
+                GenreGrid.getInstance().refreshGenreGrid();
             });
         });
 
@@ -57,6 +58,7 @@ public class BookGrid implements DefaultGrid, FilterableGrid {
             else {
                 bookController.deleteBook(book);
                 bookGrid.setItems(bookController.getBooks());
+                GenreGrid.getInstance().refreshGenreGrid();
             }
         });
         secondEditButton.addClickListener(clickEvent -> {
@@ -67,6 +69,7 @@ public class BookGrid implements DefaultGrid, FilterableGrid {
                 mainLayout.getUI().addWindow(window);
                 window.addCloseListener(closeEvent -> {
                     bookGrid.setItems(bookController.getBooks());
+                    GenreGrid.getInstance().refreshGenreGrid();
                 });
             }
         });

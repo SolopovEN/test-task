@@ -44,6 +44,7 @@ public class AuthorGrid implements DefaultGrid {
                 authorGrid.setItems(authorController.getAuthors());
                 BookGrid.getInstance().refreshBookGrid();
                 BookGrid.getInstance().refreshFilter(authorController.getAuthors());
+                GenreGrid.getInstance().refreshGenreGrid();
             }
         });
         firstEditButton.addClickListener(clickEvent -> {

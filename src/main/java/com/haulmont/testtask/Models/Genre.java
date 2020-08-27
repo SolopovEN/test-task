@@ -3,30 +3,27 @@ package com.haulmont.testtask.Models;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
 
 
 @Entity
-@Table(name = "genre")
-public class Genre {
+@Table(name = "Genre")
+public class Genre implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Pattern(regexp = "[' 'а-яА-Яa-zA-ZЁё]{1,100}", message = "Название жанра должно состоять из букв")
-    @Column(name = "Title")
+    @Column(name = "title")
     private String title;
 
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Collection<Book> book;
-
-    public int getBookCount() {
-        return this.book.size();
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "genre", cascade = CascadeType.ALL)
+    private List<Book> books;
 
     public long getId() {
         return id;
@@ -45,13 +42,5 @@ public class Genre {
     }
 
     public Genre() {
-    }
-
-    public Collection<Book> getBook() {
-        return book;
-    }
-
-    public void setBook(Collection<Book> book) {
-        this.book = book;
     }
 }

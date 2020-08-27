@@ -2,35 +2,35 @@ package com.haulmont.testtask.Models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
 
 
 @Entity
-@Table(name = "author")
-public class Author {
+@Table(name = "Author")
+public class Author implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Pattern(regexp = "[' 'а-яА-Яa-zA-ZЁё]{1,100}", message = "Имя автора должно состоять из букв")
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
 
     @Pattern(regexp = "[' 'а-яА-Яa-zA-ZЁё]{1,100}", message = "Фамилия автора должна состоять из букв")
-    @Column(name = "Surname")
+    @Column(name = "surname")
     private String surname;
 
     @Pattern(regexp = "[' 'а-яА-Яa-zA-ZЁё]{1,100}", message = "Отчество автора должно состоять из букв")
-    @Column(name = "MiddleName")
+    @Column(name = "middleName")
     private String middleName;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Collection<Book> book;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Book> authors;
 
     public long getId() {
         return id;
@@ -58,10 +58,6 @@ public class Author {
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
-    }
-
-    public Collection<Book> getBook() {
-        return book;
     }
 
     public Author(String name, String surname) {
