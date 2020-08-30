@@ -9,6 +9,7 @@ import com.haulmont.testtask.ui.grid.models.intfs.FilterableGrid;
 import com.haulmont.testtask.utils.AuthorController;
 import com.haulmont.testtask.utils.BookController;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Collection;
 
@@ -48,6 +49,8 @@ public class BookGrid implements DefaultGrid, FilterableGrid {
         secondTwoButton.setWidth("100%");
         Button secondEditButton = new Button("Редактировать");
 
+        Label label = new Label("Книги");
+        label.setStyleName(ValoTheme.LABEL_HUGE);
         bookGrid = new Grid<>();
         bookGrid.setWidth("100%");
         SingleSelect<Book> bookSingleSelect = bookGrid.asSingleSelect();
@@ -75,7 +78,8 @@ public class BookGrid implements DefaultGrid, FilterableGrid {
         });
         secondTwoButton.addComponents(secondEditButton, bookDeleteButton);
         secondTwoButton.setComponentAlignment(bookDeleteButton, Alignment.MIDDLE_RIGHT);
-        bookTable.addComponents(bookAddButton, bookGrid, secondTwoButton);
+        bookTable.addComponents(label, bookAddButton, bookGrid, secondTwoButton);
+        bookTable.setComponentAlignment(label, Alignment.TOP_CENTER);
 
         bookGrid.setItems(bookController.getBooks());
         Grid.Column<Book, Object> authorColumn = bookGrid.addColumn(book -> book.getAuthor().getSurname());

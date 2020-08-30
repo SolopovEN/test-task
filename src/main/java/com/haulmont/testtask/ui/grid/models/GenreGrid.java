@@ -5,6 +5,7 @@ import com.haulmont.testtask.ui.WindowController;
 import com.haulmont.testtask.ui.grid.models.intfs.DefaultGrid;
 import com.haulmont.testtask.utils.GenreController;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class GenreGrid implements DefaultGrid {
 
@@ -41,6 +42,8 @@ public class GenreGrid implements DefaultGrid {
         Button statistic = new Button("Статистика");
         Button thirdEditButton = new Button("Редактировать");
 
+        Label label = new Label("Жанры");
+        label.setStyleName(ValoTheme.LABEL_HUGE);
         genreGrid = new Grid<>();
         genreGrid.setWidth("100%");
         SingleSelect<Genre> genreSingleSelect = genreGrid.asSingleSelect();
@@ -67,7 +70,8 @@ public class GenreGrid implements DefaultGrid {
         genreBottomButtonsLayout.setComponentAlignment(genreDeleteButton, Alignment.MIDDLE_RIGHT);
         genreTopButtonsLayout.addComponents(thirdAddButton, statistic);
         genreTopButtonsLayout.setComponentAlignment(statistic, Alignment.MIDDLE_RIGHT);
-        genreTable.addComponents(genreTopButtonsLayout, genreGrid, genreBottomButtonsLayout);
+        genreTable.addComponents(label, genreTopButtonsLayout, genreGrid, genreBottomButtonsLayout);
+        genreTable.setComponentAlignment(label, Alignment.TOP_CENTER);
         genreGrid.setItems(genreController.getGenres());
         genreGrid.addColumn(Genre::getTitle).setCaption("Название жанра");
         Grid.Column<Genre, Long> statColumn = genreGrid.addColumn(genreController::getBooksCount).setCaption("Статистика");

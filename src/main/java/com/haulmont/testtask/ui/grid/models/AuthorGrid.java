@@ -5,6 +5,7 @@ import com.haulmont.testtask.ui.WindowController;
 import com.haulmont.testtask.ui.grid.models.intfs.DefaultGrid;
 import com.haulmont.testtask.utils.AuthorController;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class AuthorGrid implements DefaultGrid {
 
@@ -32,6 +33,8 @@ public class AuthorGrid implements DefaultGrid {
         firstTwoButton.setWidth("100%");
         Button firstEditButton = new Button("Редактировать");
 
+        Label label = new Label("Авторы");
+        label.setStyleName(ValoTheme.LABEL_HUGE);
         authorGrid = new Grid<>();
         authorGrid.setWidth("100%");
         SingleSelect<Author> authorSingleSelect = authorGrid.asSingleSelect();
@@ -61,7 +64,8 @@ public class AuthorGrid implements DefaultGrid {
         });
         firstTwoButton.addComponents(firstEditButton, authorDeleteButton);
         firstTwoButton.setComponentAlignment(authorDeleteButton, Alignment.MIDDLE_RIGHT);
-        authorTable.addComponents(authorAddButton, authorGrid, firstTwoButton);
+        authorTable.addComponents(label, authorAddButton, authorGrid, firstTwoButton);
+        authorTable.setComponentAlignment(label, Alignment.TOP_CENTER);
 
         authorGrid.setItems(authorController.getAuthors());
         authorGrid.addColumn(Author::getName).setCaption("Имя");
